@@ -1,2 +1,2 @@
 # PAz1
-Selection sort, radix sort
+selection sort, radix sort, heap sort
