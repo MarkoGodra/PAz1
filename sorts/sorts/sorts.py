@@ -30,6 +30,20 @@ def analyzeAlgorithm(type, subplotIndex):
     if(is_sorted(x)):
         CreatePlot(stdLenths, sortTimes, type.__name__, subplotIndex)
 
+def analyzeAlgorithm_with_return_value(type, subplotIndex):
+    stdLenths = [1, 10, 100, 1000, 10000]
+    sortTimes = list()
+    j = 0
+    for i in stdLenths:
+        x = random_list(0, 1000000 + 1, i)
+        startTime = time.clock()
+        z = type(x)
+        endTime = time.clock()
+        sortTimes.append(endTime - startTime)
+        j += 1
+    if(is_sorted(z)):
+        CreatePlot(stdLenths, sortTimes, type.__name__, subplotIndex)
+
 def is_sorted(A):
     testList = A[:]
     testList.sort()
@@ -42,7 +56,7 @@ def find_number_of_digits(A) :
     for i in range(0, len(A)) :
         if A[i] > max :
             max = A[i]
-    return len(str(max)) - 1
+    return len(str(max))
         
 
 def random_list (min, max, elements):
@@ -50,22 +64,23 @@ def random_list (min, max, elements):
     return list
 
 def radix_sort(A) : 
-    #Empty buckets
-    B = [[], [], [], [], [], [], [], [], [], []]
+    
     k_digit = 0
     k = 0
+    RADIX = 10
+    #Empty buckets
+    B = [[] for i in range(0, RADIX)]
 
     #Find max number of digits in a number of array A
     max_len = find_number_of_digits(A)
 
-    while(k <= max_len) :
+    while(k < max_len) :
         for i in range(0, len(A)):
-            k_digit = int((A[i]/10**k)%10)
+            k_digit = int((A[i]/RADIX**k)%RADIX)
             B[k_digit].append(A[i])
         
-        C = list(itertools.chain.from_iterable(B))
-        B = [[], [], [], [], [], [], [], [], [], []]
-        A = C
+        A = list(itertools.chain(*B))
+        B = [[] for i in range(0, RADIX)]
         k += 1
     return A
 
@@ -162,5 +177,5 @@ print("List sorted : \t", sorted)
 #plot
 analyzeAlgorithm(selection_sort, 1)
 analyzeAlgorithm(heap_sort, 2)
-analyzeAlgorithm(radix_sort, 3)
+analyzeAlgorithm_with_return_value(radix_sort, 3)
 plt.show()
